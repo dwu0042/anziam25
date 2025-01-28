@@ -1,4 +1,5 @@
 ---
+output-file: index.html
 title: "Patient movements in the Victorian hospital system: does time matter?"
 date: 2025-02
 author:
@@ -9,17 +10,9 @@ institute: "Department of Econometrics and Business Statistics, Monash Universit
 footer: "ANZIAM 2025"
 format:
   presentation-revealjs:
-    mulitplex: false
-    show-notes: false
-    slide-number: true
-    show-slide-number: all
-    controls: true
     css: styles.css
 title-slide-attributes: 
   data-background-image: img/bg-10-clean.png
-execute: 
-  echo: false
-bibliography: biblio.bib
 ---
 ## Co-Authors
   - Tjibbe Donker, []{style="color:grey"} 

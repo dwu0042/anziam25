@@ -1,0 +1,17 @@
+project:
+  output-dir: build
+  render:
+    - slides.qmd
+
+bibliography: biblio.bib
+format:
+  presentation-revealjs:
+    mulitplex: false
+    show-notes: false
+    slide-number: true
+    show-slide-number: all
+    controls: true
+
+
+execute: 
+  echo: false
