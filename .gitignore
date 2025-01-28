@@ -1,0 +1,4 @@
+*.pdf
+.vscode/*
+*_files/*
+slides.html
