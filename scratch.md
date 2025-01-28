@@ -1,0 +1,8 @@
+- Background
+  - SOTA
+    - "Naive static"
+  - People go home from hospital 
+- Model(s)
+  - Temporal Schemes
+- ? Results
+- Things Moving Forwards

@@ -1,0 +1,77 @@
+---
+title: "Patient movements in the Victorian hospital system: does time matter?"
+date: 2025-02
+author:
+  - name: David Wu
+    corresponding: true
+    email: david.wu1@monash.edu 
+institute: "Department of Econometrics and Business Statistics, Monash University"
+footer: "ANZIAM 2025"
+format:
+  presentation-revealjs:
+    mulitplex: false
+    show-notes: false
+    slide-number: true
+    show-slide-number: all
+    controls: true
+    css: styles.css
+title-slide-attributes: 
+  data-background-image: img/bg-10-clean.png
+execute: 
+  echo: false
+bibliography: biblio.bib
+---
+## Co-Authors
+  - Tjibbe Donker, []{style="color:grey"} 
+  - Nic Geard
+  - Andrew Stewardson
+  - Claire Gorrie
+  - Ben Howden
+  - Anton Peleg
+  - Yen Thon Teoh
+  - Andrew Wilson
+  - Ben Cooper
+  - Michael Lydeamore
+
+## Anti-microbial resistance, patients, and hospitals
+
+:::{.incremental}
+- Carbapenemase-producing Enterobacterales (CPE) is a type of bacteria that live in the intestine, and is generally asymptomatic, but can cause a range of severe symptoms.
+- More importantly, it is resistant to carbapenems, a class of "last-line-of-defense" antibiotic.
+- Variants of CPE have been detected in ICUs in Victorian hospitals, including a strain exclusive to Victoria.
+- Patients that are asymptomatically infected (colonised) can spread CPE and other antimicrobial-resistant infections between hospitals.
+:::
+
+
+## {.standout .monash-bg-blue .center}
+Movement of Individuals
+
+## Characterising movement 
+
+
+<!-- 
+Movement is charactersied by two processes: discharge from hospital and return to hospital
+These two processes can be treated as roughly Poisson with some rate parameter
+In the first case, we see that the distribution is relatively ???
+In the case of return to hospital 
+
+We note that in the static network, the time to return to hospital is modelled as a static value, if not a zero value.
+-->
+
+
+## Dynamic models
+
+
+## Metrics
+
+- Hitting time distribution
+- Extent (vertical slice of the hitting time distribution)   
+
+## Comparisons
+
+
+## Moving Forward
+
+- Validation
+
+## Reference List
