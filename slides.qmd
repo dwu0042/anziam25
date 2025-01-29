@@ -27,7 +27,7 @@ title-slide-attributes:
   - Michael Lydeamore, [Monash University]{style="color:grey;font-size:x-large"} 
 
 
-## Anti-microbial resistance, patients, and hospitals
+## Background
 
 :::{.incremental}
 - Carbapenemase-producing Enterobacterales (CPE) is a type of bacteria that live in the intestine, and is generally asymptomatic, but can cause a range of severe symptoms.
@@ -42,20 +42,30 @@ title-slide-attributes:
 
 ## ECHIDNA
 
-Objectives
+### Objectives
 
-## An (overly-)simplistic model 
+- Develop a surveillance tool for anti-microbial resistant (AMR) organisms
+- Evaluate ways of controlling the spread of AMR
 
-1. [Individual infection dynamics]{.fragment .semi-fade-out fragment-index=1}
+### Data
 
-2. [Within-hospital infection dynamics]{.fragment .semi-fade-out fragment-index=1}
+- Timestamped data of when patients are admitted to and discharged from a hospital.
+- Spans about 10 years from the beginning of 2011 to the end of 2019.
+- Selectively rich, administrative data.
 
-3. Between-hospital movement 
+## Components of a model 
+
+1.  [Individual infection dynamics]{.fragment .semi-fade-out fragment-index=1}
+
+2.  [Within-hospital infection dynamics]{.fragment .semi-fade-out fragment-index=1}
+
+3.  Between-hospital movement 
 
 ## Characterising Movement
 ### Existing Approaches
 
-Static networks [@donker_patient_2010]
+Treat hospitals as nodes of a static network [@donker_patient_2010]
+
 
 ```{dot}
 graph G {
