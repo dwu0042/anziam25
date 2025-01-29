@@ -1,7 +1,7 @@
 ---
 output-file: index.html
 title: "Patient movements in the Victorian hospital system: does time matter?"
-date: 2025-02
+date: 2025-02-03
 author:
   - name: David Wu
     corresponding: true
@@ -15,16 +15,17 @@ title-slide-attributes:
   data-background-image: img/bg-10-clean.png
 ---
 ## Co-Authors
-  - Tjibbe Donker, []{style="color:grey"} 
-  - Nic Geard
-  - Andrew Stewardson
-  - Claire Gorrie
-  - Ben Howden
-  - Anton Peleg
-  - Yen Thon Teoh
-  - Andrew Wilson
-  - Ben Cooper
-  - Michael Lydeamore
+  - Tjibbe Donker, [Universitätsklinikum Freiburg]{style="color:grey;font-size:x-large" } 
+  - Nic Geard, [University of Melbourne]{style="color:grey;font-size:x-large"} 
+  - Andrew Stewardson, [Alfred Health]{style="color:grey;font-size:x-large"} 
+  - Claire Gorrie, [Microbiological Diagnostic Unit Public Health Laboratory]{style="color:grey;font-size:x-large"} 
+  - Ben Howden, [Microbiological Diagnostic Unit Public Health Laboratory]{style="color:grey;font-size:x-large"} 
+  - Anton Peleg, [Alfred Health]{style="color:grey;font-size:x-large"} 
+  - Yen Thon Teoh, [Victorian Department of Health]{style="color:grey;font-size:x-large"} 
+  - Andrew Wilson, [SaferCare Victoria]{style="color:grey;font-size:x-large"} 
+  - Ben Cooper, [University of Oxford]{style="color:grey;font-size:x-large"} 
+  - Michael Lydeamore, [Monash University]{style="color:grey;font-size:x-large"} 
+
 
 ## Anti-microbial resistance, patients, and hospitals
 
@@ -36,11 +37,41 @@ title-slide-attributes:
 :::
 
 
-## {.standout .monash-bg-blue .center}
-Movement of Individuals
+<!-- ## {.standout .monash-bg-blue .center} -->
+<!-- Movement of Individuals -->
 
-## Characterising movement 
+## ECHIDNA
 
+Objectives
+
+## An (overly-)simplistic model 
+
+1. [Individual infection dynamics]{.fragment .semi-fade-out fragment-index=1}
+
+2. [Within-hospital infection dynamics]{.fragment .semi-fade-out fragment-index=1}
+
+3. Between-hospital movement 
+
+## Characterising Movement
+### Existing Approaches
+
+Static networks [@donker_patient_2010]
+
+```{dot}
+graph G {
+  layout=circo
+  overlap=false
+  A -- B;
+  B -- C;
+  C -- D;
+  B -- E;
+  A -- D;
+}
+```
+
+## Characterising Movement 
+
+Patients tend to leave hospital, and sometimes return.
 
 <!-- 
 Movement is charactersied by two processes: discharge from hospital and return to hospital
@@ -52,19 +83,23 @@ We note that in the static network, the time to return to hospital is modelled a
 -->
 
 
-## Dynamic models
+## Models of Movement
 
 
-## Metrics
-
-- Hitting time distribution
-- Extent (vertical slice of the hitting time distribution)   
-
-## Comparisons
+## Simulation Results
 
 
 ## Moving Forward
 
-- Validation
+- Verification of results via analytical computation
+  - Expected hitting time is related to the survival function, which is characterised by the forward equations
+
+    $$\begin{gathered}\mathbb{E}[h_{ij}] = \int_0^\infty S_{ij}(t) dt \\ \frac{d}{dt} S_{ij}(t) = Q_i S_{ij}(t)\end{gathered}$$
+
+- Modelling of infection dynamics / control schemes
+
 
 ## Reference List
+
+::: {#refs}
+:::
