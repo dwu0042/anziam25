@@ -2,4 +2,4 @@
 .vscode/*
 *_files/*
 slides.html
-.quarto/
+/.quarto/
