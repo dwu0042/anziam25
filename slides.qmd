@@ -13,6 +13,7 @@ format:
     css: styles.css
 title-slide-attributes: 
   data-background-image: img/bg-10-clean.png
+  # data-background-image: _extensions/quarto-monash/presentation/_images/background/bg-13.png
 ---
 ## Co-Authors
   - Tjibbe Donker, [Universitätsklinikum Freiburg]{style="color:grey;font-size:x-large" } 
@@ -104,7 +105,7 @@ We note that in the static network, the time to return to hospital is modelled a
 - Verification of results via analytical computation
   - Expected hitting time is related to the survival function, which is characterised by the forward equations
 
-    $$\begin{gathered}\mathbb{E}[h_{ij}] = \int_0^\infty S_{ij}(t) dt \\ \frac{d}{dt} S_{ij}(t) = Q_i S_{ij}(t)\end{gathered}$$
+    $$\begin{gathered}\mathbb{E}[h_{ij}] = \int_0^\infty \left(S_{ij}(t)\right)^N dt \\ \frac{d}{dt} S_{ij}(t) = Q_i S_{ij}(t)\end{gathered}$$
 
 - Modelling of infection dynamics / control schemes
 
