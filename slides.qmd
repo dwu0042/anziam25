@@ -98,7 +98,8 @@ Some flaws:
 ::: {.incremental}
 - Patients tend to leave hospital, and then return.
   
-- Movements tend to change over time (both drift and seasonally)
+- Movements tend to change over time (both drift and seasonally).
+ 
 :::
 
 ## Characterising Movement 
@@ -121,8 +122,47 @@ ax.set_yscale('log')
 ```
 
 
-## Characterising Movement
+## Characterising Movement {.smaller}
 
+::: {#fig-movement-schematic height=500}
+```{.tikz}
+\begin{tikzpicture}[scale=2, transform shape]
+  \node[draw,circle] (A) at (0,0) {$x_i$};
+  \node[draw,circle] (B) at (4,0) {$x_j$};
+  \node[draw,rectangle] (C) at (2,-2) {$z_{ij}$};
+  \node[draw,circle] (Z) at (1.5, 1) {$\emptyset$};
+  \draw[->] (A) -- (C) node[midway,below left] {$(1-p)(1-q) \lambda_{ij}(t)$};
+  \draw[->] (C) -- (B) node[midway,below right] {$\tau_{ij}(t)$};
+  \draw[->] (A) -- (Z) node[midway,above left] {$\lambda_{i}(t)$};
+  \draw[->] (A) -- (B) node[midway,above] {$(1-p)q \lambda_{ij}(t)$};
+\end{tikzpicture}
+```
+
+Schematic of movement
+:::
+
+- $p$: probability of return
+- $q$: probability of direct transfer
+- $\lambda_{ij}$: rate of movement from hospital $x_i$ to hospital $x_j$
+- $\tau_{ij}$: rate of return from home $z_{ij}$ to hospital $x_j$
+
+## Models of Movement
+
+The static network can be considered as a model where
+
+- probability of direct transfer $q$ is $1$
+- rate of movement between hospitals $\lambda_{ij}$ is static over all time
+- rate of return from homes $\tau_{ij}$ is static over all time
+
+::: {.fragment .fade-in}
+How can we improve this?
+:::
+
+## Models of Movement
+
+The inter-admission time (characterised by $\tau$) is poorly represented by a single exponential random variable.
+
+We can improve this by allowing individuals to go home (allow for indirect transfers)
 
 ```{python}
 fig, ax = plt.subplots(figsize=(16, 8))
@@ -160,29 +200,8 @@ ax.plot(xs, (1-direct_prop)*total_size/indirect_mean * np.exp(-xs / indirect_mea
 ax.legend()
 ```
 
-<!-- 
-Movement is charactersied by two processes: discharge from hospital and return to hospital
-These two processes can be treated as roughly Poisson with some rate parameter
-In the first case, we see that the distribution is relatively ???
-In the case of return to hospital 
-
-We note that in the static network, the time to return to hospital is modelled as a static value, if not a zero value.
--->
-
-
 ## Models of Movement
 
-::: {#fig-ABC height=600}
-```{.tikz}
-\begin{tikzpicture}[scale=2, transform shape]
-  \node[draw, circle] (A) at (0,0) {A};
-  \node[draw, circle] (B) at (1,1) {B};
-  \node[draw, circle] (C) at (2,0) {C};
-  \draw[->] (A) -- (B);
-  \draw[->] (B) -- (C);
-\end{tikzpicture}
-```
-:::
 
 ## Simulation Results
 
