@@ -172,20 +172,17 @@ We note that in the static network, the time to return to hospital is modelled a
 
 ## Models of Movement
 
+::: {#fig-ABC height=600}
 ```{.tikz}
-%%| filename: mia-driagrammica
-
 \begin{tikzpicture}[scale=2, transform shape]
-  % Head
-  \draw (0,0) circle (1cm);
-  % Body
-  \draw (0,-1) -- (0,-3);
-  % Arms
-  \draw (-1,-2) -- (0,-1) -- (1,-2);
-  % Legs
-  \draw (-1,-4) -- (0,-3) -- (1,-4);
+  \node[draw, circle] (A) at (0,0) {A};
+  \node[draw, circle] (B) at (1,1) {B};
+  \node[draw, circle] (C) at (2,0) {C};
+  \draw[->] (A) -- (B);
+  \draw[->] (B) -- (C);
 \end{tikzpicture}
 ```
+:::
 
 ## Simulation Results
 
@@ -202,9 +199,9 @@ We note that in the static network, the time to return to hospital is modelled a
 
 ## Thanks
 
-:::: {.columns}
+::::: {.columns}
 
-::: {.column width="60%"}
+:::: {.column width="60%"}
 ### Co-Authors
   - Tjibbe Donker, [Universitätsklinikum Freiburg]{style="color:grey;font-size:x-large" } 
   - Nic Geard, [University of Melbourne]{style="color:grey;font-size:x-large"} 
@@ -218,20 +215,28 @@ We note that in the static network, the time to return to hospital is modelled a
   - Michael Lydeamore, [Monash University]{style="color:grey;font-size:x-large"} 
 
 
-:::
+::::
 
-::: {.column width="40%"}
+:::: {.column width="40%"}
 
 ### Funding
 
 NHMRC GNT 1156742
 
-### 
 
-[Slides at [dwu0042.github.io/anziam25](https://dwu0042.github.io/anziam25)]{.absolute bottom=20}
+::: {.absolute bottom=30}
+<hr />
+
+Slides at [dwu0042.github.io/anziam25](https://dwu0042.github.io/anziam25)
+
+Github: [dwu0042](https://github.com/dwu0042)
+
+Bluesky: [\@davidjxwu.bsky.social](https://bsky.app/profile/davidjxwu.bsky.social)
 
 :::
+
 ::::
+:::::
 
 ## References 
 
