@@ -18,6 +18,7 @@ title-slide-attributes:
 
 ```{python}
 from pathlib import Path
+import numpy as np
 import polars as pl
 import seaborn as sns
 from matplotlib import pyplot as plt
@@ -26,6 +27,8 @@ basepath = Path.home() / "REPOS" / "echidna_network"
 # sns.set()
 sns.set_context("talk")
 sns.set_style("white")
+
+%config InlineBackend.figure_formats = ['svg']
 ```
 
 ## Co-Authors
@@ -78,10 +81,15 @@ sns.set_style("white")
 ## Characterising Movement
 ### Existing Approaches
 
-Treat hospitals as nodes of a static network [@donker_patient_2010]
+Treat hospitals as nodes of a static network
 
+::: {layout-ncol=2 layout-valign="middle"}
+![from @donker_dispersal_2014](img/donker_2014.jpg)
 
-```{dot}
+![from @nekkab_spread_2017](img/nekkab_2014.png)
+:::
+<!-- 
+```{dot format=svg}
 graph G {
   layout=circo
   overlap=false
@@ -91,7 +99,20 @@ graph G {
   B -- E;
   A -- D;
 }
-```
+``` -->
+
+## Characterising Movement
+### Existing Approaches
+
+Treat hospitals as nodes of a static network
+
+Some flaws:
+
+::: {.incremental}
+- Patients tend to leave hospital, and then return.
+  
+- Movements tend to change over time (both drift and seasonally)
+:::
 
 ## Characterising Movement 
 
@@ -104,13 +125,50 @@ readmit_df = pl.read_parquet(basepath / "concordant_networks/readmission_time.pa
 fig, ax = plt.subplots(figsize=(16, 8))
 sns.despine(ax=ax)
 
-sns.scatterplot(readmit_df, x="readmission_time", y="count", ax=ax)
+sns.scatterplot(readmit_df, x="readmission_time", y="count", ax=ax,)
+ax.set_xlabel("Inter-admission time (days)")
+ax.set_xscale('asinh')
+ax.set_xlim(-1e-1, None)
+ax.set_xticks([0, 1.0, 10.0, 100.0])
+ax.set_yscale('log')
+```
+
+##
+
+```{python}
+fig, ax = plt.subplots(figsize=(16, 8))
+sns.despine(ax=ax)
+
+sns.scatterplot(readmit_df, x="readmission_time", y="count", ax=ax, label="data")
 ax.set_xlabel("Inter-admission time (days)")
 ax.set_xscale('asinh')
 ax.set_xlim(-1e-1, None)
 ax.set_xticks([0, 1.0, 10.0, 100.0])
 ax.set_yscale('log')
 
+total_size = readmit_df.select(pl.col('count').sum()).item()
+
+direct_prop = (
+  readmit_df.filter(pl.col('readmission_time') < 14).select(pl.col('count').sum()).item()
+) / total_size
+
+indirect_mean = (
+  readmit_df
+  .with_columns(weight = pl.col('readmission_time') * pl.col('count'))
+  .filter(pl.col('readmission_time').ge(14))
+  .sum()
+  .select(pl.col('weight') / pl.col('count'))
+  .item()
+)
+
+xs = np.linspace(
+  0, readmit_df.select(pl.col('readmission_time').max()).item(),
+  1001
+)
+ax.plot([0, 0], [0, direct_prop * total_size], color='orange', label="spike-and-slab approximation")
+ax.plot(xs, (1-direct_prop)*total_size/indirect_mean * np.exp(-xs / indirect_mean), color='orange')
+
+ax.legend()
 ```
 
 <!-- 
@@ -126,6 +184,7 @@ We note that in the static network, the time to return to hospital is modelled a
 ## Models of Movement
 
 
+
 ## Simulation Results
 
 
@@ -139,7 +198,37 @@ We note that in the static network, the time to return to hospital is modelled a
 - Modelling of infection dynamics / control schemes
 
 
-## Reference List
+## Thanks
+
+:::: {.columns}
+
+::: {.column width="60%"}
+### Co-Authors
+  - Tjibbe Donker, [Universitätsklinikum Freiburg]{style="color:grey;font-size:x-large" } 
+  - Nic Geard, [University of Melbourne]{style="color:grey;font-size:x-large"} 
+  - Andrew Stewardson, [Alfred Health]{style="color:grey;font-size:x-large"} 
+  - Claire Gorrie, [Microbiological Diagnostic Unit Public Health Laboratory]{style="color:grey;font-size:x-large"} 
+  - Ben Howden, [Microbiological Diagnostic Unit Public Health Laboratory]{style="color:grey;font-size:x-large"} 
+  - Anton Peleg, [Alfred Health]{style="color:grey;font-size:x-large"} 
+  - Yen Thon Teoh, [Victorian Department of Health]{style="color:grey;font-size:x-large"} 
+  - Andrew Wilson, [SaferCare Victoria]{style="color:grey;font-size:x-large"} 
+  - Ben Cooper, [University of Oxford]{style="color:grey;font-size:x-large"} 
+  - Michael Lydeamore, [Monash University]{style="color:grey;font-size:x-large"} 
+
+### Funding
+
+NHMRC GNT 1156742
+
+:::
+
+::: {.column width="40%"}
+
+Slides at [dwu0042.github.io/anziam25](https://dwu0042.github.io/anziam25)
+
+:::
+::::
+
+## References 
 
 ::: {#refs}
 :::
