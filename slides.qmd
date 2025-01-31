@@ -15,6 +15,19 @@ title-slide-attributes:
   data-background-image: img/bg-10-clean.png
   # data-background-image: _extensions/quarto-monash/presentation/_images/background/bg-13.png
 ---
+
+```{python}
+from pathlib import Path
+import polars as pl
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+basepath = Path.home() / "REPOS" / "echidna_network"
+# sns.set()
+sns.set_context("talk")
+sns.set_style("white")
+```
+
 ## Co-Authors
   - Tjibbe Donker, [Universitätsklinikum Freiburg]{style="color:grey;font-size:x-large" } 
   - Nic Geard, [University of Melbourne]{style="color:grey;font-size:x-large"} 
@@ -83,6 +96,22 @@ graph G {
 ## Characterising Movement 
 
 Patients tend to leave hospital, and sometimes return.
+
+```{python}
+
+readmit_df = pl.read_parquet(basepath / "concordant_networks/readmission_time.parquet")
+
+fig, ax = plt.subplots(figsize=(16, 8))
+sns.despine(ax=ax)
+
+sns.scatterplot(readmit_df, x="readmission_time", y="count", ax=ax)
+ax.set_xlabel("Inter-admission time (days)")
+ax.set_xscale('asinh')
+ax.set_xlim(-1e-1, None)
+ax.set_xticks([0, 1.0, 10.0, 100.0])
+ax.set_yscale('log')
+
+```
 
 <!-- 
 Movement is charactersied by two processes: discharge from hospital and return to hospital
