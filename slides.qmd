@@ -24,8 +24,9 @@ from matplotlib import pyplot as plt
 
 basepath = Path.home() / "REPOS" / "echidna_network"
 # sns.set()
-sns.set_context("talk")
+sns.set_context("poster")
 sns.set_style("white")
+sns.set_palette("colorblind")
 
 %config InlineBackend.figure_formats = ['svg']
 ```
@@ -126,33 +127,36 @@ ax.set_yscale('log')
 
 ::: {#fig-movement-schematic height=500}
 ```{.tikz}
+\tikzset{every picture/.style={/utils/exec={\sffamily}}}
 \begin{tikzpicture}[scale=2, transform shape]
   \node[draw,circle] (A) at (0,0) {$x_i$};
   \node[draw,circle] (B) at (4,0) {$x_j$};
   \node[draw,rectangle] (C) at (2,-2) {$z_{ij}$};
   \node[draw,circle] (Z) at (1.5, 1) {$\emptyset$};
-  \draw[->] (A) -- (C) node[midway,below left] {$(1-p)(1-q) \lambda_{ij}(t)$};
+  \draw[->] (A) -- (C) node[midway,below left] {$\lambda_{ij}(t)$};
   \draw[->] (C) -- (B) node[midway,below right] {$\tau_{ij}(t)$};
-  \draw[->] (A) -- (Z) node[midway,above left] {$\lambda_{i}(t)$};
-  \draw[->] (A) -- (B) node[midway,above] {$(1-p)q \lambda_{ij}(t)$};
+  \draw[->] (A) -- (Z) node[midway,above left] {$\mu_{i}(t)$};
+  \draw[->] (A) -- (B) node[midway,above] {$d_{ij}(t)$};
 \end{tikzpicture}
 ```
 
 Schematic of movement
 :::
 
-- $p$: probability of return
-- $q$: probability of direct transfer
-- $\lambda_{ij}$: rate of movement from hospital $x_i$ to hospital $x_j$
-- $\tau_{ij}$: rate of return from home $z_{ij}$ to hospital $x_j$
+- $\mu_i(t)$: rate that patients leave hospital to never return
+- $d_{ij}(t)$: rate of direct transfers from hospital $x_i$ to $x_j$
+- $\lambda_{ij}$: rate of indirect transfers from hospital $x_i$ to hospital $x_j$
+- $\tau_{ij}$: time spent at home $z_{ij}$ before readmitting at hospital $x_j$
 
 ## Models of Movement
 
 The static network can be considered as a model where
 
-- probability of direct transfer $q$ is $1$
-- rate of movement between hospitals $\lambda_{ij}$ is static over all time
-- rate of return from homes $\tau_{ij}$ is static over all time
+- rate of indirect transfers is always zero
+  - time spent at home is captured in a slower rate of transfer
+- all (non-zero) rates are static over time
+
+These do not agree with our observations of patient movement.
 
 ::: {.fragment .fade-in}
 How can we improve this?
@@ -160,11 +164,13 @@ How can we improve this?
 
 ## Models of Movement
 
-The inter-admission time (characterised by $\tau$) is poorly represented by a single exponential random variable.
+We introduce indirect transfers: this separates _how many_ transfers occur from _how fast_ they occur.
 
-We can improve this by allowing individuals to go home (allow for indirect transfers)
+This also gets colonised patients out of hospital.
 
 ```{python}
+#| label: fig-adjusted-readmit-model
+#| fig-cap: Model of readmission time for an improved static network model
 fig, ax = plt.subplots(figsize=(16, 8))
 sns.despine(ax=ax)
 
@@ -203,7 +209,26 @@ ax.legend()
 ## Models of Movement
 
 
+
+## Models of Movement
+
+So we have 4 models that have different levels of fidelity:
+
+1. Naïve static network model
+2. Improved static network model
+   - include indirect transfers
+3. Series of static networks model
+   - time-varying rates
+   - implicit duration of indirect transfer
+4. Full temporal network model
+   - time-varying rates
+   - explicit duration of indirect transfer
+
 ## Simulation Results
+
+Setting 30 "infected" individuals loose to move through the network, and note the first time that each hospital is visited by one fo these individuals
+
+![]()
 
 
 ## Moving Forward
@@ -212,6 +237,8 @@ ax.legend()
   - Expected hitting time is related to the survival function, which is characterised by the forward equations
 
     $$\begin{gathered}\mathbb{E}[h_{ij}] = \int_0^\infty \left(S_{ij}(t)\right)^N dt \\ \frac{d}{dt} S_{ij}(t) = Q_i S_{ij}(t)\end{gathered}$$
+
+  - this should be tractable for the naïve static network, and plausibly computable for the improved static network
 
 - Modelling of infection dynamics / control schemes
 
