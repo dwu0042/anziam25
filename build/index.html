@@ -468,50 +468,79 @@ David Wu
 <div>
 <ul>
 <li class="fragment"><p>Patients tend to leave hospital, and then return.</p></li>
-<li class="fragment"><p>Movements tend to change over time (both drift and seasonally)</p></li>
+<li class="fragment"><p>Movements tend to change over time (both drift and seasonally).</p></li>
 </ul>
 </div>
 </section>
 <section id="characterising-movement-2" class="slide level2">
 <h2>Characterising Movement</h2>
 <p>Patients tend to leave hospital, and sometimes return.</p>
-<div id="d76c7e18" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display">
-<div>
-<figure>
-<p><img data-src="slides_files/figure-revealjs/cell-3-output-1.png" width="1293" height="678"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="characterising-movement-3" class="slide level2">
-<h2>Characterising Movement</h2>
-<div id="4735001c" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display">
-<div>
-<figure>
-<p><img data-src="slides_files/figure-revealjs/cell-4-output-1.png" width="1293" height="683"></p>
-</figure>
-</div>
-</div>
-</div>
-<!-- 
-Movement is charactersied by two processes: discharge from hospital and return to hospital
-These two processes can be treated as roughly Poisson with some rate parameter
-In the first case, we see that the distribution is relatively ???
-In the case of return to hospital 
 
-We note that in the static network, the time to return to hospital is modelled as a static value, if not a zero value.
--->
+<img data-src="slides_files/figure-revealjs/cell-3-output-1.svg" class="r-stretch"></section>
+<section id="characterising-movement-3" class="slide level2 smaller">
+<h2>Characterising Movement</h2>
+
+<img data-src="slides_files/mediabag/e7045be2fdd04c9431070ceb79e5adc07a4987d9.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;1: Schematic of movement
+</p><ul>
+<li><span class="math inline">\mu_i(t)</span>: rate that patients leave hospital to never return</li>
+<li><span class="math inline">d_{ij}(t)</span>: rate of direct transfers from hospital <span class="math inline">x_i</span> to <span class="math inline">x_j</span></li>
+<li><span class="math inline">\lambda_{ij}</span>: rate of indirect transfers from hospital <span class="math inline">x_i</span> to hospital <span class="math inline">x_j</span></li>
+<li><span class="math inline">\tau_{ij}</span>: time spent at home <span class="math inline">z_{ij}</span> before readmitting at hospital <span class="math inline">x_j</span></li>
+</ul>
 </section>
 <section id="models-of-movement" class="slide level2">
 <h2>Models of Movement</h2>
-<img data-src="slides_files/mediabag/mia-driagrammica.svg">
+<p>The static network can be considered as a model where</p>
+<ul>
+<li>rate of indirect transfers is always zero
+<ul>
+<li>time spent at home is captured in a slower rate of transfer</li>
+</ul></li>
+<li>all (non-zero) rates are static over time</li>
+</ul>
+<p>These do not agree with our observations of patient movement.</p>
+<div class="fragment fade-in">
+<p>How can we improve this?</p>
+</div>
+</section>
+<section id="models-of-movement-1" class="slide level2">
+<h2>Models of Movement</h2>
+<p>We introduce indirect transfers: this separates <em>how many</em> transfers occur from <em>how fast</em> they occur.</p>
+<p>This also gets colonised patients out of hospital.</p>
+
+<img data-src="slides_files/figure-revealjs/fig-adjusted-readmit-model-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;2: Model of readmission time for an improved static network model
+</p></section>
+<section id="models-of-movement-2" class="slide level2">
+<h2>Models of Movement</h2>
+</section>
+<section id="models-of-movement-3" class="slide level2">
+<h2>Models of Movement</h2>
+<p>So we have 4 models that have different levels of fidelity:</p>
+<ol type="1">
+<li>Naïve static network model</li>
+<li>Improved static network model
+<ul>
+<li>include indirect transfers</li>
+</ul></li>
+<li>Series of static networks model
+<ul>
+<li>time-varying rates</li>
+<li>implicit duration of indirect transfer</li>
+</ul></li>
+<li>Full temporal network model
+<ul>
+<li>time-varying rates</li>
+<li>explicit duration of indirect transfer</li>
+</ul></li>
+</ol>
 </section>
 <section id="simulation-results" class="slide level2">
 <h2>Simulation Results</h2>
-</section>
+<p>Setting 30 “infected” individuals loose to move through the network, and note the first time that each hospital is visited by one fo these individuals</p>
+
+<img data-src=".png" class="r-stretch"></section>
 <section id="moving-forward" class="slide level2">
 <h2>Moving Forward</h2>
 <ul>
@@ -519,6 +548,7 @@ We note that in the static network, the time to return to hospital is modelled a
 <ul>
 <li><p>Expected hitting time is related to the survival function, which is characterised by the forward equations</p>
 <p><span class="math display">\begin{gathered}\mathbb{E}[h_{ij}] = \int_0^\infty \left(S_{ij}(t)\right)^N dt \\ \frac{d}{dt} S_{ij}(t) = Q_i S_{ij}(t)\end{gathered}</span></p></li>
+<li><p>this should be tractable for the naïve static network, and plausibly computable for the improved static network</p></li>
 </ul></li>
 <li>Modelling of infection dynamics / control schemes</li>
 </ul>
@@ -543,8 +573,12 @@ We note that in the static network, the time to return to hospital is modelled a
 </div><div class="column" style="width:40%;">
 <h3 id="funding">Funding</h3>
 <p>NHMRC GNT 1156742</p>
-<h3 id="section"></h3>
-<p><span class="absolute" style="bottom: 20px; ">Slides at <a href="https://dwu0042.github.io/anziam25">dwu0042.github.io/anziam25</a></span></p>
+<div class="absolute" style="bottom: 30px; ">
+<hr>
+<p>Slides at <a href="https://dwu0042.github.io/anziam25">dwu0042.github.io/anziam25</a></p>
+<p>Github: <a href="https://github.com/dwu0042">dwu0042</a></p>
+<p>Bluesky: <a href="https://bsky.app/profile/davidjxwu.bsky.social">@davidjxwu.bsky.social</a></p>
+</div>
 </div></div>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
