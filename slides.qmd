@@ -383,7 +383,7 @@ So we have 4 models that have different levels of fidelity:
 
 ## Simulation Results
 
-Setting 30 "infected" individuals loose to move through the network, and note the first time that each hospital is visited by one of these individuals
+Set 30 "infected" individuals loose to move through the network from a single initial hospital location, and note the first time that each hospital is visited by one of these individuals.
 
 ```{python}
 simulation_archives = {
@@ -440,6 +440,33 @@ sns.histplot(
 sns.despine(ax=ax)
 ```
 
+## Simulation Results
+
+Comparing median observed extent between different models, paired by `seed' hospital.
+
+```{python}
+#| label: fig-pairplot
+#| fig-cap: Pairplot of median extent, where each point is a seed location
+def compute_median_extent(df: pl.DataFrame):
+    return df.group_by('seed').median().select('seed', 'extent')
+
+combined_median_df = pl.concat(
+    [compute_median_extent(df).with_columns(pl.lit(label.replace(' ', '\n')).alias('simulation'))
+     for label, df in processed_results.items()]
+)
+
+combined_median_sort = combined_median_df.group_by('seed').median().select('seed', 'extent').sort('extent', descending=True).select('seed').with_row_index('sorted_seed')
+
+combined_median_df = combined_median_df.join(combined_median_sort, on='seed')
+
+paired_median_df = combined_median_df.pivot("simulation", index="sorted_seed", values="extent").fill_null(0.0)
+
+ppl = sns.PairGrid(paired_median_df.to_pandas(), vars=combined_median_df.select(pl.col('simulation').unique()).to_series().to_list(), height=2)
+ppl.map_lower(sns.scatterplot, marker='.')
+ppl.map_diag(sns.histplot)
+ppl.map_lower(lambda *a, **k: plt.axline((0,0), slope=1, linestyle='dashed', color='k'))
+```
+
 ## Simulation Results 
 
 We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations, setting the probability of non-return to 0.
@@ -454,11 +481,17 @@ for model, metrics in processed_results.items():
 ```
 
 ```{python}
-#| label: fig-overall-hitting-comparison
-#| fig-cap: Empirical distribution of hitting times
+#| label: fig-zoomed-hitting-comparison
+#| fig-cap: Empirical distribution of hitting times (zoomed)
 plt.figure(figsize=(14, 7.5))
+
 for model, dist in hitting_time_dists.items():
     plt.plot(dist, np.linspace(0, 1, len(dist), endpoint=False), label=model)
+
+plt.xlim(-10, 200)
+plt.ylim(-0.01, 0.1)
+
+plt.axvline(30, color='k', lw=0.7)
 
 plt.xlabel('hitting time')
 plt.ylabel('ECDF')
@@ -471,17 +504,11 @@ plt.legend(loc='lower right');
 We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations, setting the probability of non-return to 0.
 
 ```{python}
-#| label: fig-zoomed-hitting-comparison
-#| fig-cap: Empirical distribution of hitting times (zoomed)
+#| label: fig-overall-hitting-comparison
+#| fig-cap: Empirical distribution of hitting times
 plt.figure(figsize=(14, 7.5))
-
 for model, dist in hitting_time_dists.items():
     plt.plot(dist, np.linspace(0, 1, len(dist), endpoint=False), label=model)
-
-plt.xlim(-10, 200)
-plt.ylim(-0.01, 0.1)
-
-plt.axvline(30, color='k', lw=0.7)
 
 plt.xlabel('hitting time')
 plt.ylabel('ECDF')
