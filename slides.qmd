@@ -173,7 +173,7 @@ These do not agree with our observations of patient movement.
 How can we improve this?
 :::
 
-## Models of Movement {auto-animate=true}
+## Models of Movement 
 
 ### Improved Static Network
 
@@ -183,7 +183,7 @@ This also gets colonised patients out of hospital.
 
 ![Improved static network model with indirect layer](img/bilayer_improved_static.png){#fig-improved-static}
 
-## Models of Movement {auto-animate=true}
+## Models of Movement 
 
 ### Improved Static Network
 
@@ -449,7 +449,7 @@ plt.legend(loc='lower right');
 
 ## Simulation Results 
 
-We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations
+We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations, setting the probability of non-return to 0.
 
 ```{python}
 #| label: fig-zoomed-hitting-comparison
