@@ -137,6 +137,7 @@ ax.set_yscale('log')
 
 ::: {#fig-movement-schematic height=500}
 ```{.tikz}
+%%| filename: movement-schematic
 \tikzset{every picture/.style={/utils/exec={\sffamily}}}
 \begin{tikzpicture}[transform shape]
   \node[draw,circle] (A) at (0,0) {$x_i$};
@@ -237,6 +238,7 @@ Instead of using a single static network, we can change the edges of the network
 :::: {#fig-snapshots }
 
 ```{.tikz}
+%%| filename: snapshot-schematic
 \tikzset{every picture/.style={/utils/exec={\sffamily}}}
 \begin{tikzpicture}[scale=0.7, every node/.style={draw,circle,inner sep=2pt}]
     % First network
@@ -286,6 +288,7 @@ We can also expand the state space to include time explicitly (albeit discretise
 ::: {#fig-temporal-schematic}
 
 ```{.tikz}
+%%| filename: temporal-schematic 
 \tikzset{every picture/.style={/utils/exec={\sffamily}}}
 \tikzset{lefty/.style args={#1}{->, bend left=#1}, lefty/.default=20}
 \tikzset{righty/.style args={#1}{->, bend right=#1}, righty/.default=20}
