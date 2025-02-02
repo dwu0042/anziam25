@@ -475,8 +475,16 @@ David Wu
 <section id="characterising-movement-2" class="slide level2">
 <h2>Characterising Movement</h2>
 <p>Patients tend to leave hospital, and sometimes return.</p>
-
-<img data-src="slides_files/figure-revealjs/cell-3-output-1.svg" class="r-stretch"></section>
+<div id="b04bf0cc" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="slides_files/figure-revealjs/cell-3-output-1.png" width="1317" height="697"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="characterising-movement-3" class="slide level2 smaller">
 <h2>Characterising Movement</h2>
 
@@ -504,18 +512,46 @@ Figure&nbsp;1: Schematic of movement
 <p>How can we improve this?</p>
 </div>
 </section>
-<section id="models-of-movement-1" class="slide level2">
-<h2>Models of Movement</h2>
+<section id="models-of-movement-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Models of Movement</h2>
+<h3 id="improved-static-network">Improved Static Network</h3>
 <p>We introduce indirect transfers: this separates <em>how many</em> transfers occur from <em>how fast</em> they occur.</p>
 <p>This also gets colonised patients out of hospital.</p>
 
-<img data-src="slides_files/figure-revealjs/fig-adjusted-readmit-model-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
-Figure&nbsp;2: Model of readmission time for an improved static network model
+<img data-src="img/bilayer_improved_static.png" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;2: Improved static network model with indirect layer
 </p></section>
-<section id="models-of-movement-2" class="slide level2">
-<h2>Models of Movement</h2>
+<section id="models-of-movement-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Models of Movement</h2>
+<h3 id="improved-static-network-1">Improved Static Network</h3>
+<p>We introduce indirect transfers: this separates <em>how many</em> transfers occur from <em>how fast</em> they occur.</p>
+<p>This also gets colonised patients out of hospital.</p>
+<div id="cell-fig-adjusted-readmit-model" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div id="fig-adjusted-readmit-model" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-adjusted-readmit-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="slides_files/figure-revealjs/fig-adjusted-readmit-model-output-1.png" width="1317" height="557">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adjusted-readmit-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Model of readmission time for an improved static network model
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="models-of-movement-3" class="slide level2">
+<h2>Models of Movement</h2>
+<h3 id="series-of-static-networks">Series of Static Networks</h3>
+<p>Instead of using a single static network, we can change the edges of the network over time.</p>
+</section>
+<section id="models-of-movement-4" class="slide level2">
+<h2>Models of Movement</h2>
+<h3 id="temporally-explicit-model">Temporally Explicit Model</h3>
+<p>We can also expand the state space to include time explicitly (albeit discretised).</p>
+</section>
+<section id="models-of-movement-5" class="slide level2">
 <h2>Models of Movement</h2>
 <p>So we have 4 models that have different levels of fidelity:</p>
 <ol type="1">
@@ -538,9 +574,59 @@ Figure&nbsp;2: Model of readmission time for an improved static network model
 </section>
 <section id="simulation-results" class="slide level2">
 <h2>Simulation Results</h2>
-<p>Setting 30 “infected” individuals loose to move through the network, and note the first time that each hospital is visited by one fo these individuals</p>
-
-<img data-src=".png" class="r-stretch"></section>
+<p>Setting 30 “infected” individuals loose to move through the network, and note the first time that each hospital is visited by one of these individuals</p>
+<p>We can measure the <em>extent</em> of spread by counting the hospitals at least one individual has visited by some given day (here day 30).</p>
+<div id="cell-fig-extent-30" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div id="fig-extent-30" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-extent-30-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="slides_files/figure-revealjs/fig-extent-30-output-1.png" width="1118" height="548">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-extent-30-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Distribution of 30-day extent in different simulation models on different network types
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="simulation-results-1" class="slide level2">
+<h2>Simulation Results</h2>
+<p>We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across <span class="math inline">N=20</span> realisations</p>
+<div id="cell-fig-overall-hitting-comparison" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div id="fig-overall-hitting-comparison" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-overall-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="slides_files/figure-revealjs/fig-overall-hitting-comparison-output-1.png" width="1180" height="659">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overall-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Empirical distribution of hitting times
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="simulation-results-2" class="slide level2">
+<h2>Simulation Results</h2>
+<p>We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across <span class="math inline">N=20</span> realisations</p>
+<div id="cell-fig-zoomed-hitting-comparison" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div id="fig-zoomed-hitting-comparison" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-zoomed-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="slides_files/figure-revealjs/fig-zoomed-hitting-comparison-output-1.png" width="1211" height="670">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-zoomed-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Empirical distribution of hitting times (zoomed)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="moving-forward" class="slide level2">
 <h2>Moving Forward</h2>
 <ul>
@@ -590,6 +676,19 @@ Donker, T., J. Wallinga, and H. Grundmann. 2014. <span>“Dispersal of Antibioti
 <div id="ref-nekkab_spread_2017" class="csl-entry" role="listitem">
 Nekkab, N., P. Astagneau, L. Temime, and P. Crepey. 2017. <span>“Spread of Hospital-Acquired Infections: <span>A</span> Comparison of Healthcare Networks.”</span> <em>PLoS Comput Biol</em> 13 (8): e1005666. <a href="https://doi.org/10.1371/journal.pcbi.1005666">https://doi.org/10.1371/journal.pcbi.1005666</a>.
 </div>
+</div>
+</section>
+<section id="length-of-stay" class="slide level2">
+<h2>Length of Stay</h2>
+<div id="fig-los-ss" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-los-ss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="img/los_ss.png" height="700">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-los-ss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Length of stay distribution across all hospitals
+</figcaption>
+</figure>
 </div>
 <div class="quarto-auto-generated-content">
 <p><img src="_extensions/quarto-monash/presentation/_images/logo/monash-stacked-blue-rgb-transparent.png" class="slide-logo"></p>
