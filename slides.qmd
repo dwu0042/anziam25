@@ -54,7 +54,9 @@ sns.set_palette("colorblind")
 - Patients that are asymptomatically infected (colonised) can spread CPE and other antimicrobial-resistant infections between hospitals.
 :::
 
-
+:::{.fragment}
+![Incidence of CPE in Victoria [@vichealth_cpe]](img/cpe_power_bi_again.png){#fig-cpe-counts height=400}
+:::
 <!-- ## {.standout .monash-bg-blue .center} -->
 <!-- Movement of Individuals -->
 
@@ -69,9 +71,13 @@ sns.set_palette("colorblind")
 
 - Timestamped data of when patients are admitted to and discharged from a hospital.
 - Spans about 10 years from the beginning of 2011 to the end of 2019.
-- Selectively rich, administrative data.
+- Selectively-rich administrative data.
 
+| e_LinkedPersonId | CAMPUS | AdmissionDateTime | SeparationDatetime | ... |
+|:----|:----|:----|:----|:----|
+| jdoe21 | Alfred, The | 2032-02-30T16:20:00Z | 2032-05-04T11:59:59Z | |
 
+: Relevant fields from the Victorian Admitted Episodes Database (VAED) {#tbl-vaed-fields}
 
 ## Modelling the spread of AMR 
 
@@ -95,7 +101,7 @@ Treat hospitals as nodes of a static network, use a continuous-time Markov chain
 ## Characterising Movement
 ### Existing Approaches
 
-Treat hospitals as nodes of a static network
+Treat hospitals as nodes of a static network, use a continuous-time Markov chain to model 
 
 Some flaws:
 
