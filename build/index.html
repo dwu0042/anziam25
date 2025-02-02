@@ -519,30 +519,35 @@ Table&nbsp;1: Relevant fields from the Victorian Admitted Episodes Database (VAE
 <li class="fragment"><p>Movements tend to change over time (both drift and seasonally).</p></li>
 </ul>
 </div>
-</section>
-<section id="characterising-movement-2" class="slide level2">
-<h2>Characterising Movement</h2>
-<p>Patients tend to leave hospital, and sometimes return.</p>
-<div id="cell-fig-interadmission-time" class="cell" data-execution_count="2">
+<div class="fragment">
+<div id="cell-fig-daily-movement" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
-<div id="fig-interadmission-time" class="quarto-float quarto-figure quarto-figure-center">
+<div id="fig-daily-movement" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-interadmission-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="slides_files/figure-revealjs/fig-interadmission-time-output-1.png" width="1317" height="697">
+<div aria-describedby="fig-daily-movement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="slides_files/figure-revealjs/fig-daily-movement-output-1.svg">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-interadmission-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Distribution of time between subsequent admissions (discharge to next admission)
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-daily-movement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Total daily movement (transfers between hospitals) over time
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
+</div>
 </section>
+<section id="characterising-movement-2" class="slide level2">
+<h2>Characterising Movement</h2>
+<p>Patients tend to leave hospital, and sometimes return.</p>
+
+<img data-src="slides_files/figure-revealjs/fig-interadmission-time-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;3: Distribution of time between subsequent admissions (discharge to next admission)
+</p></section>
 <section id="characterising-movement-3" class="slide level2 smaller">
 <h2>Characterising Movement</h2>
 
 <img data-src="slides_files/mediabag/movement-schematic.svg" class="r-stretch quarto-figure-center"><p class="caption">
-Figure&nbsp;3: Schematic of movement
+Figure&nbsp;4: Schematic of movement
 </p><ul>
 <li><span class="math inline">\mu_i(t)</span>: rate that patients leave hospital to never return</li>
 <li><span class="math inline">d_{ij}(t)</span>: rate of direct transfers from hospital <span class="math inline">x_i</span> to <span class="math inline">x_j</span></li>
@@ -572,35 +577,24 @@ Figure&nbsp;3: Schematic of movement
 <p>This also gets colonised patients out of hospital.</p>
 
 <img data-src="img/bilayer_improved_static.png" class="r-stretch quarto-figure-center"><p class="caption">
-Figure&nbsp;4: Improved static network model with indirect layer
+Figure&nbsp;5: Improved static network model with indirect layer
 </p></section>
 <section id="models-of-movement-2" class="slide level2">
 <h2>Models of Movement</h2>
 <h3 id="improved-static-network-1">Improved Static Network</h3>
 <p>We introduce indirect transfers: this separates <em>how many</em> transfers occur from <em>how fast</em> they occur.</p>
 <p>This also gets colonised patients out of hospital.</p>
-<div id="cell-fig-adjusted-readmit-model" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display">
-<div id="fig-adjusted-readmit-model" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-adjusted-readmit-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="slides_files/figure-revealjs/fig-adjusted-readmit-model-output-1.png" width="1317" height="557">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adjusted-readmit-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Model of readmission time for an improved static network model
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
+
+<img data-src="slides_files/figure-revealjs/fig-adjusted-readmit-model-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;6: Model of readmission time for an improved static network model
+</p></section>
 <section id="models-of-movement-3" class="slide level2">
 <h2>Models of Movement</h2>
 <h3 id="series-of-static-networks">Series of Static Networks</h3>
 <p>Instead of using a single static network, we can change the edges of the network over time.</p>
 
 <img data-src="slides_files/mediabag/snapshot-schematic.svg" class="r-stretch quarto-figure-center"><p class="caption">
-Figure&nbsp;6: Schematic of a series of networks
+Figure&nbsp;7: Schematic of a series of networks
 </p><p>Here, the time between admissions is implicitly modelled by:</p>
 <ol type="1">
 <li>keeping patients that go home in a separate auxiliary state until the network changes</li>
@@ -613,7 +607,7 @@ Figure&nbsp;6: Schematic of a series of networks
 <p>We can also expand the state space to include time explicitly (albeit discretised).</p>
 
 <img data-src="slides_files/mediabag/temporal-schematic .svg" class="r-stretch quarto-figure-center"><p class="caption">
-Figure&nbsp;7: Schematic of a temporal network
+Figure&nbsp;8: Schematic of a temporal network
 </p></section>
 <section id="models-of-movement-5" class="slide level2">
 <h2>Models of Movement</h2>
@@ -640,57 +634,24 @@ Figure&nbsp;7: Schematic of a temporal network
 <h2>Simulation Results</h2>
 <p>Setting 30 “infected” individuals loose to move through the network, and note the first time that each hospital is visited by one of these individuals</p>
 <p>We can measure the <em>extent</em> of spread by counting the hospitals at least one individual has visited by some given day (here day 30).</p>
-<div id="cell-fig-extent-30" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display">
-<div id="fig-extent-30" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-extent-30-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="slides_files/figure-revealjs/fig-extent-30-output-1.png" width="1118" height="548">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-extent-30-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: Distribution of 30-day extent in different simulation models on different network types
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
+
+<img data-src="slides_files/figure-revealjs/fig-extent-30-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;9: Distribution of 30-day extent in different simulation models on different network types
+</p></section>
 <section id="simulation-results-1" class="slide level2">
 <h2>Simulation Results</h2>
 <p>We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across <span class="math inline">N=20</span> realisations, setting the probability of non-return to 0.</p>
-<div id="cell-fig-overall-hitting-comparison" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-display">
-<div id="fig-overall-hitting-comparison" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-overall-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="slides_files/figure-revealjs/fig-overall-hitting-comparison-output-1.png" width="1180" height="659">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overall-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9: Empirical distribution of hitting times
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
+
+<img data-src="slides_files/figure-revealjs/fig-overall-hitting-comparison-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;10: Empirical distribution of hitting times
+</p></section>
 <section id="simulation-results-2" class="slide level2">
 <h2>Simulation Results</h2>
 <p>We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across <span class="math inline">N=20</span> realisations, setting the probability of non-return to 0.</p>
-<div id="cell-fig-zoomed-hitting-comparison" class="cell" data-execution_count="8">
-<div class="cell-output cell-output-display">
-<div id="fig-zoomed-hitting-comparison" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-zoomed-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="slides_files/figure-revealjs/fig-zoomed-hitting-comparison-output-1.png" width="1211" height="670">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-zoomed-hitting-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;10: Empirical distribution of hitting times (zoomed)
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
+
+<img data-src="slides_files/figure-revealjs/fig-zoomed-hitting-comparison-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;11: Empirical distribution of hitting times (zoomed)
+</p></section>
 <section id="moving-forward" class="slide level2">
 <h2>Moving Forward</h2>
 <h3 id="verification-of-simulations">Verification of simulations</h3>
@@ -752,7 +713,7 @@ Nekkab, N., P. Astagneau, L. Temime, and P. Crepey. 2017. <span>“Spread of Hos
 <img data-src="img/los_ss.png" height="700">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-los-ss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11: Length of stay distribution across all hospitals
+Figure&nbsp;12: Length of stay distribution across all hospitals
 </figcaption>
 </figure>
 </div>
@@ -764,15 +725,15 @@ Figure&nbsp;11: Length of stay distribution across all hospitals
 <p>where <span class="math inline">w_i</span>, <span class="math inline">x_i</span> are related to the roots of the Laguerre polynomials.</p>
 <p>The problem is that the convergence of this numerical scheme depends on how <span class="math inline">f(t)</span> behaves. In our case, <span class="math inline">f(t) = e^t \left(\sum_k c_k e^{-\lambda_k t}\right)^N</span>. As <span class="math inline">\lambda</span> decreases, the “tail” of the integral becomes more important, and is not captured as well.</p>
 <p>We can counteract this by linearly scaling time <span class="math inline">t</span>.</p>
-<div id="cell-fig-scaling-laggauss" class="cell" data-execution_count="9">
+<div id="cell-fig-scaling-laggauss" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div id="fig-scaling-laggauss" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-scaling-laggauss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="slides_files/figure-revealjs/fig-scaling-laggauss-output-1.png" width="1099" height="551">
+<img data-src="slides_files/figure-revealjs/fig-scaling-laggauss-output-1.svg">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scaling-laggauss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12: Effect of scaling time for Gauss-Laguerre quadrature
+Figure&nbsp;13: Effect of scaling time for Gauss-Laguerre quadrature
 </figcaption>
 </figure>
 </div>
