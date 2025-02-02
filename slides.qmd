@@ -111,6 +111,25 @@ Some flaws:
 - Movements tend to change over time (both drift and seasonally).
 :::
 
+:::{.fragment}
+```{python}
+#| label: fig-daily-movement
+#| fig-cap: Total daily movement (transfers between hospitals) over time
+movements = pl.read_csv(basepath / "concordant_networks/analyses/movement_aggregated.csv")
+
+fig, ax = plt.subplots(figsize=(16, 4))
+sns.scatterplot(
+  data = movements.group_by('t').agg(pl.col('w').sum()),
+  x='t', y='w',
+  ax=ax
+)
+sns.despine(ax=ax)
+plt.xlabel('Time [days after reference date]')
+plt.ylabel("""Movement
+(count)""");
+```
+:::
+
 ## Characterising Movement 
 
 Patients tend to leave hospital, and sometimes return.
