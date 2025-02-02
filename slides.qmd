@@ -20,7 +20,8 @@ from pathlib import Path
 import numpy as np
 import polars as pl
 import seaborn as sns
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, colors
+import h5py
 
 basepath = Path.home() / "REPOS" / "echidna_network"
 # sns.set()
@@ -164,6 +165,18 @@ How can we improve this?
 
 ## Models of Movement
 
+### Improved Static Network
+
+We introduce indirect transfers: this separates _how many_ transfers occur from _how fast_ they occur.
+
+This also gets colonised patients out of hospital.
+
+![Improved static network model with indirect layer](img/bilayer_improved_static.png){#fig-improved-static}
+
+## Models of Movement
+
+### Improved Static Network
+
 We introduce indirect transfers: this separates _how many_ transfers occur from _how fast_ they occur.
 
 This also gets colonised patients out of hospital.
@@ -171,7 +184,7 @@ This also gets colonised patients out of hospital.
 ```{python}
 #| label: fig-adjusted-readmit-model
 #| fig-cap: Model of readmission time for an improved static network model
-fig, ax = plt.subplots(figsize=(16, 8))
+fig, ax = plt.subplots(figsize=(16, 6))
 sns.despine(ax=ax)
 
 sns.scatterplot(readmit_df, x="readmission_time", y="count", ax=ax, label="data")
@@ -208,6 +221,9 @@ ax.legend()
 
 ## Models of Movement
 
+### Series of Static Networks
+
+Instead of using a single static network, we can change the edges of the network over time.
 
 
 ## Models of Movement
@@ -226,9 +242,67 @@ So we have 4 models that have different levels of fidelity:
 
 ## Simulation Results
 
-Setting 30 "infected" individuals loose to move through the network, and note the first time that each hospital is visited by one fo these individuals
+Setting 30 "infected" individuals loose to move through the network, and note the first time that each hospital is visited by one of these individuals
 
-![]()
+```{python}
+simulation_archives = {
+    'temporal': basepath / 'zero_sims/temporal/sim_all_30s.h5',
+    'improved static': basepath / 'zero_sims/static/sim_all_30s_fixed_axis.h5',
+    'series': basepath / 'zero_sims/snapshot/sims_with_30seeds_pseudocap_fixed_axis.h5',
+    'naive static': basepath / 'zero_sims/naive_static/sim_all_30s.h5',
+}
+
+metrics_archives = {
+    'temporal': basepath / 'zero_sims/temporal/metrics_30s.parquet',
+    'improved static': basepath / 'zero_sims/static/metrics_30s_fa.parquet',
+    'series': basepath / 'zero_sims/snapshot/metrics_30s_fa.parquet',
+    'naive static': basepath / 'zero_sims/naive_static/metrics_30s.parquet'
+}
+
+processed_results = {}
+
+# metrics precomputed in compute_summary_stats.ipynb
+for label, archive in metrics_archives.items():
+        processed_results[label] = pl.read_parquet(archive)
+```
+
+We can measure the _extent_ of spread by counting the hospitals at least one individual has visited by some given day (here day 30).
+
+```{python}
+#| label: fig-extent-30
+#| fig-cap: "Distribution of 30-day extent in different simulation models on different network types"
+ 
+combined_all_df = pl.concat(
+    [(df.select('seed', 'extent')
+        .with_columns(
+            pl.lit(label).alias('simulation'), 
+            pl.col('extent').cast(pl.Int64)
+        )
+     ) for label, df in processed_results.items()
+    ]
+)
+
+sim_type_order = ['temporal', 'series', 'improved static', 'naive static']
+extent_bins = np.arange(0, combined_all_df.select('extent').max().item()+1)
+
+fig, ax = plt.subplots(figsize=(13, 6))
+sns.histplot(
+    combined_all_df, 
+    x = 'extent', 
+    hue = 'simulation', 
+    multiple = 'dodge', 
+    bins = extent_bins, 
+    hue_order = sim_type_order,
+    discrete = True,
+    ax = ax
+)
+sns.despine(ax=ax)
+```
+
+## Simulation Results
+
+We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations
+
 
 
 ## Moving Forward
