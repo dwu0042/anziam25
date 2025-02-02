@@ -14,6 +14,8 @@ format:
     width: 1600
     height: 900
     theme: [default, custom.scss]
+    title-slide-attributes: 
+      data-background-size: contain
 
 filters:
   - tikz

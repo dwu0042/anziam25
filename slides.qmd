@@ -54,7 +54,9 @@ sns.set_palette("colorblind")
 - Patients that are asymptomatically infected (colonised) can spread CPE and other antimicrobial-resistant infections between hospitals.
 :::
 
-
+:::{.fragment}
+![Incidence of CPE in Victoria [@vichealth_cpe]](img/cpe_power_bi_again.png){#fig-cpe-counts height=400}
+:::
 <!-- ## {.standout .monash-bg-blue .center} -->
 <!-- Movement of Individuals -->
 
@@ -69,9 +71,15 @@ sns.set_palette("colorblind")
 
 - Timestamped data of when patients are admitted to and discharged from a hospital.
 - Spans about 10 years from the beginning of 2011 to the end of 2019.
-- Selectively rich, administrative data.
+- Selectively-rich administrative data.
 
-## Components of a model 
+| e_LinkedPersonId | CAMPUS | AdmissionDateTime | SeparationDatetime | ... |
+|:----|:----|:----|:----|:----|
+| jdoe21 | Alfred, The | 2032-02-30T16:20:00Z | 2032-05-04T11:59:59Z | |
+
+: Relevant fields from the Victorian Admitted Episodes Database (VAED) {#tbl-vaed-fields}
+
+## Modelling the spread of AMR 
 
 1.  [Individual infection dynamics]{.fragment .semi-fade-out fragment-index=1}
 
@@ -82,7 +90,7 @@ sns.set_palette("colorblind")
 ## Characterising Movement
 ### Existing Approaches
 
-Treat hospitals as nodes of a static network
+Treat hospitals as nodes of a static network, use a continuous-time Markov chain to model 
 
 ::: {layout-ncol=2 layout-valign="bottom"}
 ![from @donker_dispersal_2014](img/donker_2014.jpg){height=600}
@@ -93,7 +101,7 @@ Treat hospitals as nodes of a static network
 ## Characterising Movement
 ### Existing Approaches
 
-Treat hospitals as nodes of a static network
+Treat hospitals as nodes of a static network, use a continuous-time Markov chain to model 
 
 Some flaws:
 
@@ -101,7 +109,6 @@ Some flaws:
 - Patients tend to leave hospital, and then return.
   
 - Movements tend to change over time (both drift and seasonally).
- 
 :::
 
 ## Characterising Movement 
@@ -109,6 +116,8 @@ Some flaws:
 Patients tend to leave hospital, and sometimes return.
 
 ```{python}
+#| label: fig-interadmission-time
+#| fig-cap: Distribution of time between subsequent admissions (discharge to next admission)
 
 readmit_df = pl.read_parquet(basepath / "concordant_networks/readmission_time.parquet")
 
@@ -129,7 +138,7 @@ ax.set_yscale('log')
 ::: {#fig-movement-schematic height=500}
 ```{.tikz}
 \tikzset{every picture/.style={/utils/exec={\sffamily}}}
-\begin{tikzpicture}[scale=2, transform shape]
+\begin{tikzpicture}[transform shape]
   \node[draw,circle] (A) at (0,0) {$x_i$};
   \node[draw,circle] (B) at (4,0) {$x_j$};
   \node[draw,rectangle] (C) at (2,-2) {$z_{ij}$};
@@ -225,6 +234,48 @@ ax.legend()
 
 Instead of using a single static network, we can change the edges of the network over time.
 
+:::: {#fig-snapshots }
+
+```{.tikz}
+\tikzset{every picture/.style={/utils/exec={\sffamily}}}
+\begin{tikzpicture}[scale=0.7, every node/.style={draw,circle,inner sep=2pt}]
+    % First network
+    \node (A1) at (0,1) {A};
+    \node (B1) at (-1,-1) {B};
+    \node (C1) at (1,-1) {C};
+    \draw[->, bend right=30] (A1) to (B1);
+    \draw[->, bend right=30] (B1) to (C1);
+    \draw[->, bend right=30] (C1) to (A1);
+    
+    % Arrow to next network
+    \draw[->,thick] (1.5,0) to (2.5,0);
+    
+    % Second network
+    \node (A2) at (4,1) {A};
+    \node (B2) at (3,-1) {B};
+    \node (C2) at (5,-1) {C};
+    \draw[->, bend right=30] (A2) to (B2);
+    \draw[->, bend left=30] (A2) to (C2);
+    
+    % Arrow to next network
+    \draw[->,thick] (5.5,0) to (6.5,0);
+    
+    % Third network
+    \node (A3) at (8,1) {A};
+    \node (B3) at (7,-1) {B};
+    \node (C3) at (9,-1) {C};
+    \draw[->, bend right=30] (B3) to (C3);
+    \draw[->, bend left=30] (A3) to (C3);
+\end{tikzpicture}
+```
+
+Schematic of a series of networks
+::::
+
+Here, the time between admissions is implicitly modelled by:
+
+1. keeping patients that go home in a separate auxiliary state until the network changes
+2. the movement of patients at home returning to hospital is modelled as a binomial rv.
 
 ## Models of Movement
 
@@ -232,7 +283,67 @@ Instead of using a single static network, we can change the edges of the network
 
 We can also expand the state space to include time explicitly (albeit discretised).
 
+::: {#fig-temporal-schematic}
 
+```{.tikz}
+\tikzset{every picture/.style={/utils/exec={\sffamily}}}
+\tikzset{lefty/.style args={#1}{->, bend left=#1}, lefty/.default=20}
+\tikzset{righty/.style args={#1}{->, bend right=#1}, righty/.default=20}
+\tikzset{faded/.style={->, line width=0.2pt, color=gray}}
+\begin{tikzpicture}[every node/.style={draw,circle,inner sep=2pt}]
+    % Grid of nodes
+    \node (A1) at (0,3) {A1};
+    \node (B1) at (0,2) {B1};
+    \node (C1) at (0,1) {C1};
+    \draw[lefty] (A1) to (B1);
+    \draw[righty={35}] (A1) to (C1);
+    
+    \node (A2) at (1.5,3) {A2};
+    \node (B2) at (1.5,2) {B2};
+    \node (C2) at (1.5,1) {C2};
+    \draw[righty] (B2) to (A2);
+    \draw[lefty] (C2) to (B2);
+
+    \draw[faded] (A1) to (A2);
+    \draw[faded] (B1) to (B2);
+    \draw[faded] (C1) to (C2);
+
+    \draw[->] (B1) to (A2);
+    
+    \node (A3) at (3,3) {A3};
+    \node (B3) at (3,2) {B3};
+    \node (C3) at (3,1) {C3};
+    \draw[righty] (A3) to (B3);
+    \draw[lefty] (B3) to (C3);
+    \draw[lefty] (C3) to (B3);
+
+    \draw[faded] (A2) to (A3);
+    \draw[faded] (B2) to (B3);
+    \draw[faded] (C2) to (C3);
+
+    \draw[->] (C2) to (A3);
+    \draw[->] (B2) to (A3);
+    \draw[->] (C1) to (B3);
+
+    \node (A4) at (4.5,3) {A4};
+    \node (B4) at (4.5,2) {B4};
+    \node (C4) at (4.5,1) {C4};
+    \draw[righty] (A4) to (B4);
+    \draw[righty] (C4) to (B4);
+
+
+    \draw[faded] (A3) to (A4);
+    \draw[faded] (B3) to (B4);
+    \draw[faded] (C3) to (C4);
+
+    \draw[->] (B3) to (C4);
+    \draw[->] (A3) to (B4);
+    \draw[->] (A3) to (C4);
+\end{tikzpicture}
+```
+
+Schematic of a temporal network
+:::
 
 ## Models of Movement
 
@@ -309,7 +420,7 @@ sns.despine(ax=ax)
 
 ## Simulation Results 
 
-We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations
+We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations, setting the probability of non-return to 0.
 
 ```{python}
 hitting_time_columns = pl.selectors.starts_with('hitting_time_')
@@ -358,14 +469,20 @@ plt.legend(loc='lower right');
 
 ## Moving Forward
 
-- Verification of results via analytical computation
-  - Expected hitting time is related to the survival function, which is characterised by the forward equations
+### Verification of simulations
+The expected hitting time is related to the survival function, which is characterised by the backward equations
 
-    $$\begin{gathered}\mathbb{E}[h_{ij}] = \int_0^\infty \left(S_{ij}(t)\right)^N dt \\ \frac{d}{dt} S_{ij}(t) = Q_i S_{ij}(t)\end{gathered}$$
+  $$\begin{gathered}\mathbb{E}[h_{ij}] = \int_0^\infty \left(S_{ij}(t)\right)^N dt \\ \frac{d}{dt} S_{ij}(t) = Q_i S_{ij}(t)\end{gathered}$$
 
-  - this should be tractable for the naïve static network, and plausibly computable for the improved static network
+This should be tractable for the naïve static network, and plausibly computable for the improved static network.
 
-- Modelling of infection dynamics / control schemes
+However, the integral is annoying to numerically compute. [⤷](#sec-gl-scaling)
+
+### Infection dynamics and control
+
+The primary objective of the ECHIDNA project is surveillance and control.
+
+The movement simulations already implement infection dynamics, which are turned off.
 
 
 ## Thanks
@@ -417,3 +534,61 @@ Bluesky: [\@davidjxwu.bsky.social](https://bsky.app/profile/davidjxwu.bsky.socia
 ## Length of Stay
 
 ![Length of stay distribution across all hospitals](img/los_ss.png){#fig-los-ss height=700}
+
+## Gauss-Laguerre and Scaling {#sec-gl-scaling .scrollable}
+
+We can approximate the integral
+
+$$ \int_0^\infty e^{-t} f(t) dt \approx \sum_{i=1}^{M} w_i f(x_i) $$
+
+where $w_i$, $x_i$ are related to the roots of the Laguerre polynomials.
+
+The problem is that the convergence of this numerical scheme depends on how $f(t)$ behaves.
+In our case, $f(t) = e^t \left(\sum_k c_k e^{-\lambda_k t}\right)^N$.
+As $\lambda$ decreases, the "tail" of the integral becomes more important, and is not captured as well.
+
+We can counteract this by linearly scaling time $t$.
+
+```{python}
+#| label: fig-scaling-laggauss
+#| fig-cap: Effect of scaling time for Gauss-Laguerre quadrature
+def expl(xs, l=-1, c=1):
+    return c * np.exp(l * xs)
+
+def expl_scaled(xs, l=-1, c=1, s=1):
+    return expl(s * xs, l=l, c=c)
+
+def fexpls(l=-1, c=1, s=1):
+    def expls(xs):
+        return expl_scaled(xs, l=l, c=c, s=s)
+    return expls
+
+def laggauss_integrate(fun, prec=30):
+    xs, ws = np.polynomial.laguerre.laggauss(prec)
+    return np.dot(ws, fun(xs) * np.exp(xs))
+
+ss = np.logspace(0, 6, num=71, base=10.0)
+
+plt.figure(figsize=(13, 6))
+plt.semilogx(ss,
+             [s * laggauss_integrate(
+                 fexpls(l=-0.005, c=1, s=s),
+                 prec=30)
+              for s in ss],
+             'o-',
+             label=r'$s\int_o^\infty e^{-\lambda st}$'
+            )
+plt.semilogx(ss,
+             [s * laggauss_integrate(
+                 fexpls(l=-0.0005, c=0.1, s=s),
+                 prec=30)
+              for s in ss],
+             'o-',
+             label=r'$s\int_o^\infty 0.1 e^{-0.1\lambda st}$'
+            )
+
+plt.xlabel('Scaling factor $s$') 
+plt.ylabel('Recovered Integral')
+plt.legend()
+sns.despine()
+```
