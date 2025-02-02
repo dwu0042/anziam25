@@ -248,7 +248,7 @@ So we have 4 models that have different levels of fidelity:
    - time-varying rates
    - explicit duration of indirect transfer
 
-## Simulation Results {auto-animate=true}
+## Simulation Results 
 
 Setting 30 "infected" individuals loose to move through the network, and note the first time that each hospital is visited by one of these individuals
 
@@ -307,7 +307,7 @@ sns.histplot(
 sns.despine(ax=ax)
 ```
 
-## Simulation Results {auto-animate=true}
+## Simulation Results 
 
 We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations
 
@@ -321,7 +321,9 @@ for model, metrics in processed_results.items():
 ```
 
 ```{python}
-plt.figure()
+#| label: fig-overall-hitting-comparison
+#| fig-cap: Empirical distribution of hitting times
+plt.figure(figsize=(14, 7.5))
 for model, dist in hitting_time_dists.items():
     plt.plot(dist, np.linspace(0, 1, len(dist), endpoint=False), label=model)
 
@@ -331,8 +333,14 @@ sns.despine()
 plt.legend(loc='lower right');
 ```
 
+## Simulation Results 
+
+We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations
+
 ```{python}
-plt.figure()
+#| label: fig-zoomed-hitting-comparison
+#| fig-cap: Empirical distribution of hitting times (zoomed)
+plt.figure(figsize=(14, 7.5))
 
 for model, dist in hitting_time_dists.items():
     plt.plot(dist, np.linspace(0, 1, len(dist), endpoint=False), label=model)
@@ -340,9 +348,12 @@ for model, dist in hitting_time_dists.items():
 plt.xlim(-10, 200)
 plt.ylim(-0.01, 0.1)
 
-plt.axvline(30, color='k')
+plt.axvline(30, color='k', lw=0.7)
 
-plt.legend(loc='lower right')
+plt.xlabel('hitting time')
+plt.ylabel('ECDF')
+sns.despine()
+plt.legend(loc='lower right');
 ```
 
 ## Moving Forward
