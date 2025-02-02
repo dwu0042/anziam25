@@ -26,7 +26,7 @@ import h5py
 basepath = Path.home() / "REPOS" / "echidna_network"
 # sns.set()
 sns.set_context("poster")
-sns.set_style("white")
+sns.set_style("ticks")
 sns.set_palette("colorblind")
 
 %config InlineBackend.figure_formats = ['svg']
@@ -163,7 +163,7 @@ These do not agree with our observations of patient movement.
 How can we improve this?
 :::
 
-## Models of Movement
+## Models of Movement {auto-animate=true}
 
 ### Improved Static Network
 
@@ -173,7 +173,7 @@ This also gets colonised patients out of hospital.
 
 ![Improved static network model with indirect layer](img/bilayer_improved_static.png){#fig-improved-static}
 
-## Models of Movement
+## Models of Movement {auto-animate=true}
 
 ### Improved Static Network
 
@@ -228,6 +228,14 @@ Instead of using a single static network, we can change the edges of the network
 
 ## Models of Movement
 
+### Temporally Explicit Model
+
+We can also expand the state space to include time explicitly (albeit discretised).
+
+
+
+## Models of Movement
+
 So we have 4 models that have different levels of fidelity:
 
 1. Naïve static network model
@@ -240,7 +248,7 @@ So we have 4 models that have different levels of fidelity:
    - time-varying rates
    - explicit duration of indirect transfer
 
-## Simulation Results
+## Simulation Results {auto-animate=true}
 
 Setting 30 "infected" individuals loose to move through the network, and note the first time that each hospital is visited by one of these individuals
 
@@ -299,11 +307,43 @@ sns.histplot(
 sns.despine(ax=ax)
 ```
 
-## Simulation Results
+## Simulation Results {auto-animate=true}
 
 We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across $N=20$ realisations
 
+```{python}
+hitting_time_columns = pl.selectors.starts_with('hitting_time_')
 
+hitting_time_dists = dict()
+for model, metrics in processed_results.items():
+    hit_time_agg = metrics.select(hitting_time_columns).to_numpy().flatten()
+    hitting_time_dists[model] = np.sort(hit_time_agg)
+```
+
+```{python}
+plt.figure()
+for model, dist in hitting_time_dists.items():
+    plt.plot(dist, np.linspace(0, 1, len(dist), endpoint=False), label=model)
+
+plt.xlabel('hitting time')
+plt.ylabel('ECDF')
+sns.despine()
+plt.legend(loc='lower right');
+```
+
+```{python}
+plt.figure()
+
+for model, dist in hitting_time_dists.items():
+    plt.plot(dist, np.linspace(0, 1, len(dist), endpoint=False), label=model)
+
+plt.xlim(-10, 200)
+plt.ylim(-0.01, 0.1)
+
+plt.axvline(30, color='k')
+
+plt.legend(loc='lower right')
+```
 
 ## Moving Forward
 
@@ -362,3 +402,7 @@ Bluesky: [\@davidjxwu.bsky.social](https://bsky.app/profile/davidjxwu.bsky.socia
 
 ::: {#refs}
 :::
+
+## Length of Stay
+
+![Length of stay distribution across all hospitals](img/los_ss.png){#fig-los-ss height=700}
