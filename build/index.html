@@ -632,7 +632,7 @@ Figure&nbsp;8: Schematic of a temporal network
 </section>
 <section id="simulation-results" class="slide level2">
 <h2>Simulation Results</h2>
-<p>Setting 30 “infected” individuals loose to move through the network, and note the first time that each hospital is visited by one of these individuals</p>
+<p>Set 30 “infected” individuals loose to move through the network from a single initial hospital location, and note the first time that each hospital is visited by one of these individuals.</p>
 <p>We can measure the <em>extent</em> of spread by counting the hospitals at least one individual has visited by some given day (here day 30).</p>
 
 <img data-src="slides_files/figure-revealjs/fig-extent-30-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
@@ -640,10 +640,10 @@ Figure&nbsp;9: Distribution of 30-day extent in different simulation models on d
 </p></section>
 <section id="simulation-results-1" class="slide level2">
 <h2>Simulation Results</h2>
-<p>We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across <span class="math inline">N=20</span> realisations, setting the probability of non-return to 0.</p>
+<p>Comparing median observed extent between different models, paired by `seed’ hospital.</p>
 
-<img data-src="slides_files/figure-revealjs/fig-overall-hitting-comparison-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
-Figure&nbsp;10: Empirical distribution of hitting times
+<img data-src="slides_files/figure-revealjs/fig-pairplot-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;10: Pairplot of median extent, where each point is a seed location
 </p></section>
 <section id="simulation-results-2" class="slide level2">
 <h2>Simulation Results</h2>
@@ -651,6 +651,13 @@ Figure&nbsp;10: Empirical distribution of hitting times
 
 <img data-src="slides_files/figure-revealjs/fig-zoomed-hitting-comparison-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
 Figure&nbsp;11: Empirical distribution of hitting times (zoomed)
+</p></section>
+<section id="simulation-results-3" class="slide level2">
+<h2>Simulation Results</h2>
+<p>We can also plot the empirical cumulative distribution of hitting times between pairs of hospitals across <span class="math inline">N=20</span> realisations, setting the probability of non-return to 0.</p>
+
+<img data-src="slides_files/figure-revealjs/fig-overall-hitting-comparison-output-1.svg" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;12: Empirical distribution of hitting times
 </p></section>
 <section id="moving-forward" class="slide level2">
 <h2>Moving Forward</h2>
@@ -713,7 +720,7 @@ Nekkab, N., P. Astagneau, L. Temime, and P. Crepey. 2017. <span>“Spread of Hos
 <img data-src="img/los_ss.png" height="700">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-los-ss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12: Length of stay distribution across all hospitals
+Figure&nbsp;13: Length of stay distribution across all hospitals
 </figcaption>
 </figure>
 </div>
@@ -725,7 +732,7 @@ Figure&nbsp;12: Length of stay distribution across all hospitals
 <p>where <span class="math inline">w_i</span>, <span class="math inline">x_i</span> are related to the roots of the Laguerre polynomials.</p>
 <p>The problem is that the convergence of this numerical scheme depends on how <span class="math inline">f(t)</span> behaves. In our case, <span class="math inline">f(t) = e^t \left(\sum_k c_k e^{-\lambda_k t}\right)^N</span>. As <span class="math inline">\lambda</span> decreases, the “tail” of the integral becomes more important, and is not captured as well.</p>
 <p>We can counteract this by linearly scaling time <span class="math inline">t</span>.</p>
-<div id="cell-fig-scaling-laggauss" class="cell" data-execution_count="10">
+<div id="cell-fig-scaling-laggauss" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div id="fig-scaling-laggauss" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig">
@@ -733,7 +740,7 @@ Figure&nbsp;12: Length of stay distribution across all hospitals
 <img data-src="slides_files/figure-revealjs/fig-scaling-laggauss-output-1.svg">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scaling-laggauss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13: Effect of scaling time for Gauss-Laguerre quadrature
+Figure&nbsp;14: Effect of scaling time for Gauss-Laguerre quadrature
 </figcaption>
 </figure>
 </div>
