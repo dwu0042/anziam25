@@ -13,6 +13,7 @@ format:
     controls: true
     width: 1600
     height: 900
+    theme: [default, custom.scss]
 
 filters:
   - tikz
